@@ -13,7 +13,7 @@ Theoretically it introduces shorter term dependencies between source and target.
 '''
 
 from __future__ import print_function
-from keras.utils.visualize_util import plot
+#from keras.utils.visualize_util import plot
 from keras.models import Sequential
 from keras.layers import Activation, TimeDistributed, Dense, RepeatVector, recurrent, Embedding, Reshape
 import numpy as np
@@ -158,7 +158,7 @@ for _ in range(LAYERS):
 model.add(TimeDistributed(Dense(ptable.size)))
 model.add(Activation('softmax'))
 model.summary()
-plot(model, show_shapes=True, to_file='pho_rnn.png', show_layer_names=False)
+#plot(model, show_shapes=True, to_file='pho_rnn.png', show_layer_names=False)
 
 model.compile(loss='sparse_categorical_crossentropy',
               optimizer='adam',
@@ -171,13 +171,16 @@ def save(refs, preds, filename):
             guess = ptable.decode(pred, calc_argmax=False, ch=' ').strip()
             print(correct, '|', guess, file=res)
 
+tr_loss = []
 # Train the model each generation and show predictions against the validation dataset
 for iteration in range(1, 120):
     print()
     print('-' * 50)
     print('Iteration', iteration)
-    model.fit(X_train, y_train[..., np.newaxis], batch_size=BATCH_SIZE, nb_epoch=1,
+    history = model.fit(X_train, y_train[..., np.newaxis], batch_size=BATCH_SIZE, nb_epoch=1,
               validation_data=(X_val, y_val[..., np.newaxis])) # add a new dim to y_train and y_val to match output
+    tr_loss.extend(history.history['loss'])
+    print
     preds = model.predict_classes(X_val, verbose=0)
     save(y_val, preds, 'rnn_{}.pred'.format(iteration))
 
@@ -192,6 +195,8 @@ for iteration in range(1, 120):
         guess = ptable.decode(pred, ch=' ').strip()
         print('W:', q[::-1] if INVERT else q)
         print('T:', correct)
-        print(colors.ok + '☑' + colors.close if correct == guess else colors.fail + '☒' + colors.close, 
+        print(colors.ok + '☑' + colors.close if correct == guess else colors.fail + '☒' + colors.close,
               guess, '(' + str(levenshtein(correct.split(), guess.split())) + ')')
         print('---')
+
+###########
