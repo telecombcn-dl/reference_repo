@@ -140,6 +140,11 @@ np.random.shuffle(indices)
 X_train = X_train[indices]
 y_train = y_train[indices]
 
+X_train = X_train[:2 * BATCH_SIZE]
+y_train = y_train[:2 * BATCH_SIZE]
+X_val = X_val[:2 * BATCH_SIZE]
+y_val = y_val[:2 * BATCH_SIZE]
+
 print(X_train.shape)
 print(y_train.shape)
 
@@ -173,7 +178,8 @@ def save(refs, preds, filename):
 
 tr_loss = []
 va_loss = []
-acc = []
+tr_acc = []
+val_acc = []
 # Train the model each generation and show predictions against the validation dataset
 for iteration in range(1, 20):
     print()
@@ -182,8 +188,9 @@ for iteration in range(1, 20):
     history = model.fit(X_train, y_train[..., np.newaxis], batch_size=BATCH_SIZE, nb_epoch=1,
               validation_data=(X_val, y_val[..., np.newaxis])) # add a new dim to y_train and y_val to match output
     tr_loss.extend(history.history['loss'])
-    va_loss.extend(history.history['loss'])
-    acc.extend(history.history['acc'])
+    va_loss.extend(history.history['val_loss'])
+    tr_acc.extend(history.history['acc'])
+    val_acc.extend(history.history['val_acc'])
     print
     preds = model.predict_classes(X_val, verbose=0)
     save(y_val, preds, 'rnn_{}.pred'.format(iteration))
@@ -206,5 +213,6 @@ for iteration in range(1, 20):
 # Write tr losses to output file
 np.savetxt('tr_losses.txt', tr_loss)
 np.savetxt('va_losses.txt', va_loss)
-np.savetxt('acc.txt', acc)
+np.savetxt('tr_acc.txt', tr_acc)
+np.savetxt('val_acc.txt', val_acc)
 
