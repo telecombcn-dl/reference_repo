@@ -7,9 +7,8 @@ The aim of this course is to train students in methods of deep learning for spee
 
 ### Authors
 
-[J.A. Rodríguz Fonollosa](https://github.com/jarfo)
+[J.A. Rodríguez Fonollosa](https://github.com/jarfo)
 
 Antonio Bonafonte
 
 [Santi Pascual](https://github.com/santi-pdp)
-
