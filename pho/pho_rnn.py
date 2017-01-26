@@ -172,14 +172,18 @@ def save(refs, preds, filename):
             print(correct, '|', guess, file=res)
 
 tr_loss = []
+va_loss = []
+acc = []
 # Train the model each generation and show predictions against the validation dataset
-for iteration in range(1, 120):
+for iteration in range(1, 20):
     print()
     print('-' * 50)
     print('Iteration', iteration)
     history = model.fit(X_train, y_train[..., np.newaxis], batch_size=BATCH_SIZE, nb_epoch=1,
               validation_data=(X_val, y_val[..., np.newaxis])) # add a new dim to y_train and y_val to match output
     tr_loss.extend(history.history['loss'])
+    va_loss.extend(history.history['loss'])
+    acc.extend(history.history['acc'])
     print
     preds = model.predict_classes(X_val, verbose=0)
     save(y_val, preds, 'rnn_{}.pred'.format(iteration))
@@ -201,4 +205,6 @@ for iteration in range(1, 120):
 
 # Write tr losses to output file
 np.savetxt('tr_losses.txt', tr_loss)
+np.savetxt('va_losses.txt', va_loss)
+np.savetxt('acc.txt', acc)
 
