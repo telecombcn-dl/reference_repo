@@ -140,10 +140,10 @@ np.random.shuffle(indices)
 X_train = X_train[indices]
 y_train = y_train[indices]
 
-X_train = X_train[:2 * BATCH_SIZE]
-y_train = y_train[:2 * BATCH_SIZE]
-X_val = X_val[:2 * BATCH_SIZE]
-y_val = y_val[:2 * BATCH_SIZE]
+# X_train = X_train[:2 * BATCH_SIZE]
+# y_train = y_train[:2 * BATCH_SIZE]
+# X_val = X_val[:2 * BATCH_SIZE]
+# y_val = y_val[:2 * BATCH_SIZE]
 
 print(X_train.shape)
 print(y_train.shape)
