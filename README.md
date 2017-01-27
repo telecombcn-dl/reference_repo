@@ -1,4 +1,4 @@
-# dlsl
+# dlsl reference repo
 Deep Learning for Speech and Language
 
 Winter Seminar UPC TelecomBCN (January 24-31, 2017)
